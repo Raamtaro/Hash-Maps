@@ -8,12 +8,6 @@ class HashMap {
 
     }
 
-    /**
-     * hash(key) {} should return a hashCode
-     * We'll use the hashCode to create a bucket using the modulo operator against the number of open spots we've got in the array
-     * Not exactly sure that this goes inside the hash(key) function or out just yet...
-     */
-
     hash(key){
         let hashCode = 0;
       
@@ -25,14 +19,10 @@ class HashMap {
         return hashCode;
     }
 
-    /**
-     * set(key, value) {} - will
-     */
-
     set(key, value){
         //define an index for the given key
         const index = this.hash(key) % this.capacity;
-        // console.log(index) 
+        console.log(index) 
 
         if (this.map[index]) { //Is there already something in the bucket? Passing this check implies that the size of the linkedList is at least one
             if (this.map[index].size === 1) {//is the bucket just the one item?
@@ -152,10 +142,58 @@ class HashMap {
         //If it passes the above checks, we can assume that the single item in the bucket contains a key which matches the one given as the arg
 
         return true
-
     }
 
-    remove(key){ }
+    remove(key){
+        const index = this.hash(key) % this.capacity
+        const bucket = this.map[index]
+
+        //If there's nothing in the bucket, then abort mission
+        if (!bucket) {
+            console.error(`Cannot remove key: ${key} - does not exist`)
+            return
+        }
+
+        //If it gets here, then there's something in the bucket.
+
+        //If there are multiple items in the bucket, then we need to loop through and find the right one to remove
+        if (bucket.size > 1) {
+            let current = bucket.head
+            let i = 0
+
+            while (i < bucket.size) {
+                if (current.value.key === key) {
+                    //if the current LinkedList Item key is the same as the arg, then we'll remove it at the current index and return
+                    console.log(`Removing key:value pair ${key} : ${current.value.value} from the bucket...`)
+                    bucket.removeAt(i)
+                    console.log(`Successfully removed ${key} from bucket!`)
+                    return
+                }
+                //If there wasn't a match, then move on to the next index...
+                current = current.nextNode
+                i++
+            }
+            //If it's completely passed through the loop, then that means that the key doesn't exist.
+            console.error(`Cannot remove key: ${key} - does not exist`)
+            return
+        }
+        //If the code is running at this point, this means that there is one item in the list
+
+
+        //If the one key is not equal to the given arg, then error out and return
+        if (bucket.head.value.key != key) {
+            console.error(`Cannot remove key: ${key} - does not exist`)
+            return
+        }
+
+        //Else, we can assume that the one item in the list is the same key as the given arg
+
+        bucket.pop()
+        console.log(`Removed key:value pair associated with: ${key}`)
+        return
+
+
+    }
 
     length() {}
 
