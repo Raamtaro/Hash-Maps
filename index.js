@@ -12,6 +12,7 @@ hasheesh.set("az", "This is value #2")
 console.log(hasheesh.map[4].head)
 
 hasheesh.set("az", "This is value #3")
+hasheesh.remove("aa")
 
 console.log("******* VALUES HAVE BEEN CHANGED*******")
 
