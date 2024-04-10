@@ -83,10 +83,76 @@ class HashMap {
         return
     }
 
-    get(key){}
+    get(key){
+        //Returns the `value` associated with the key if it exists
+        const index = this.hash(key) % this.capacity
+        const bucket = this.map[index]
+
+        //If the bucket doesn't contain anything at all....
+        if (!bucket) {
+            console.error(`${key} not found, try set(key, value) first`)
+            return
+        }
+        //If it passes, then we can assume that the bucket has SOMETHING in it
+
+        //If the bucket contains more than 1 thing...
+        if (bucket.size > 1) {
+            let current = bucket.head
+            let i = 0
+            while (i < bucket.size) {
+                if (current.value.key === key) {
+                    return current.value.value
+                }
+                current = current.nextNode
+                i++
+            }
+            console.error(`${key} not found, try set(key, value) first`)
+            return
+        }
+
+        //If it doesn't go through the above block of code, then we can assume that the bucket has only got 1 item in it
+
+        if (bucket.head.value.key != key) {
+            console.error(`${key} not found, try set(key, value) first`)
+            return
+        }
+
+        //And if it passes the final check above, then we can assume that the given key is equal to the one key that already exists in the bucket
+
+        return bucket.head.value.value
+    }
 
     has(key){
-        return false //for now just to fail the check in set(key, value)
+        const index = this.hash(key) % this.capacity
+        const bucket = this.map[index]
+
+        //similar checks to the get(key) method
+        //does the bucket contain anything at all? If not, then return false
+
+        if (!bucket) {return false}
+
+        //If it passes the above check, then it probably has something
+
+        //If the bucket contains more than one item, we've got to parse through keys to find a match
+        if (bucket.size > 1) {
+            let current = bucket.head
+            let i = 0
+            while (i < bucket.size) {
+                if (current.value.key === key) {
+                    return true
+                }
+                current = current.nextNode
+                i++
+            }
+            return false //if it completes the loop without returning, then the key doesn't exist
+        }
+
+        if (bucket.head.value.key != key) {return false} //If it's gotten this far, then we can assume that there is only one item
+
+        //If it passes the above checks, we can assume that the single item in the bucket contains a key which matches the one given as the arg
+
+        return true
+
     }
 
     remove(key){ }
