@@ -32,23 +32,56 @@ class HashMap {
     set(key, value){
         //define an index for the given key
         const index = this.hash(key) % this.capacity;
-        const preExisting = this.has(key)
+        
         //if the key already exists, update the old value with the given argument
         //Otherwise, 
         //set the key with a value in the appropriate bucket
 
-        if (preExisting) {
-            //Check if the key is the same as the one that's already in the bucket
-            //If so - overwrite the old value with the new one
+        if (this.map[index]) { //Is there already something in the bucket?
+            if (this.map[index].size === 1) {//is the bucket just the one item?
+                if (this.map[index].head.value.key === key) { //If the keys are the same, update the value with the supplied arg, or create a value
+                    this.map[index].head.value.value = value
+                    return
+                }
+                this.map[index].append({ //If the list is 1, but the key is not the same, then append a new node to the list
+                    key: key,
+                    value: value
+                })
+                return
+            }
 
-            //Else, set the nextNode to new Node({key: value}) because there is a collision
+            //else, the list is greater than 1
+            let current = this.map[index].head
+            let i = 0;
+
+            //Iterate through the list until we find the existing key
+            while (i < this.map[index].size) {
+                if (current.value.key === key) {
+                    current.value.value = value
+                    return
+                }
+                current = current.nextNode
+                i++
+            }
+            //if we haven't found an existing key, then create a new list Item
+            this.map[index].append({
+                key: key,
+                value: value
+            })
+
+            return
 
         }
+
+        //If there is nothing that is already in the bucket/index, then append a new LinkedList
 
         const bucketContents = new LinkedList()
         this.map[index] = bucketContents
 
-        bucketContents.prepend([key,value])
+        bucketContents.prepend({
+            key: key,
+            value: value
+        })
 
         return
 
