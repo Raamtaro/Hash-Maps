@@ -21,7 +21,7 @@ class HashMap {
         for (let i = 0; i < key.length; i++) {
           hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % this.capacity; 
         }
-     
+        // console.log(hashCode)
         return hashCode;
     }
 
@@ -32,12 +32,9 @@ class HashMap {
     set(key, value){
         //define an index for the given key
         const index = this.hash(key) % this.capacity;
-        
-        //if the key already exists, update the old value with the given argument
-        //Otherwise, 
-        //set the key with a value in the appropriate bucket
+        // console.log(index) 
 
-        if (this.map[index]) { //Is there already something in the bucket?
+        if (this.map[index]) { //Is there already something in the bucket? Passing this check implies that the size of the linkedList is at least one
             if (this.map[index].size === 1) {//is the bucket just the one item?
                 if (this.map[index].head.value.key === key) { //If the keys are the same, update the value with the supplied arg, or create a value
                     this.map[index].head.value.value = value
@@ -84,10 +81,6 @@ class HashMap {
         })
 
         return
-
-
-
-
     }
 
     get(key){}
